@@ -1,3 +1,5 @@
+include(":core:common")
+
 pluginManagement {
     repositories {
         google()
@@ -12,5 +14,12 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+enableFeaturePreview("VERSION_CATALOGS")
+
 rootProject.name = "sololabs.app"
-include ':app'
+include(":app")
+include(":core:common")
+include(":core:data")
+include(":core:database")
+include(":core:datastore")
+include(":core:network")

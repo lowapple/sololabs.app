@@ -1,0 +1,34 @@
+def hasLibraryPlugin = pluginManager.hasPlugin("com.android.library")
+def hasApplicationPlugin = pluginManager.hasPlugin("com.android.application")
+
+if (hasLibraryPlugin || hasApplicationPlugin) {
+    def androidCompileSdkVersion = findProperty("android.compileSdk").toString().toInteger()
+    def androidMinimalSdkVersion = findProperty("android.minSdk").toString().toInteger()
+    def androidTargetSdkVersion = findProperty("android.targetSdk").toString().toInteger()
+    def major = findProperty("android.major").toString().toInteger()
+    def minor = findProperty("android.minor").toString().toInteger()
+    def patch = findProperty("android.patch").toString().toInteger()
+    def androidVersionCode = (10000 * major) + (100 * minor) + (patch)
+    def androidVersionName = "${major}.${minor}.${patch}"
+
+    android {
+        compileSdk = androidCompileSdkVersion
+        defaultConfig {
+            minSdk = androidMinimalSdkVersion
+            targetSdk = androidTargetSdkVersion
+            if (hasApplicationPlugin) {
+                versionCode = androidVersionCode
+                versionName = androidVersionName
+            }
+            if (hasLibraryPlugin) {
+                consumerProguardFiles("consumer-rules.pro")
+            }
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
+
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
+}
